@@ -24,9 +24,9 @@ namespace Rejuvena.MultiWorldLib.API
 
         public sealed override IEnumerable<GenPass> Passes => Tasks;
 
-        public override WorldSaveParameters SaveParameters => new(ShouldSave, !NoPlayerSaving);
+        public sealed override WorldSaveParameters SaveParameters => new(ShouldSave, !NoPlayerSaving);
 
-        public override WorldUpdateParameters UpdateParameters {
+        public sealed override WorldUpdateParameters UpdateParameters {
             get {
                 bool norm = NormalUpdates;
                 return new WorldUpdateParameters(
