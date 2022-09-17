@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 namespace Rejuvena.MultiWorldLib
 {
 	[UsedImplicitly]
-	public sealed class MwlMod : Mod
+	public sealed class MultiWorldMod : Mod
 	{
 	}
 }

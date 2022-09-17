@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Terraria.ModLoader;
 using Terraria.WorldBuilding;
 
@@ -8,29 +7,29 @@ namespace Rejuvena.MultiWorldLib.API
     /// <summary>
     ///     An object defining the behavior of a world loaded under the multi-world system provided by Multi-World Lib.
     /// </summary>
-    public interface IWorld : IModType
+    public abstract class MultiWorld : ModType
     {
         #region World Creation Parameters
 
         /// <summary>
         ///     The world's width, in tiles.
         /// </summary>
-        int Width { get; }
+        public abstract int Width { get; }
 
         /// <summary>
         ///     The world's height, in tiles.
         /// </summary>
-        int Height { get; }
+        public abstract int Height { get; }
 
         /// <summary>
         ///     The world generation passes that should be ran upon generating this world.
         /// </summary>
-        IEnumerable<GenPass> Passes { get; }
+        public abstract IEnumerable<GenPass> Passes { get; }
 
         /// <summary>
         ///     The world generation configuration that should be applied upon generating this world.
         /// </summary>
-        WorldGenConfiguration? Configuration { get; }
+        public virtual WorldGenConfiguration? Configuration => null;
 
         #endregion
 
@@ -39,7 +38,7 @@ namespace Rejuvena.MultiWorldLib.API
         /// <summary>
         ///     Describes what data should be saved upon exiting.
         /// </summary>
-        WorldSaveParameters SaveParameters { get; }
+        public virtual WorldSaveParameters SaveParameters => new();
 
         #endregion
 
@@ -48,7 +47,7 @@ namespace Rejuvena.MultiWorldLib.API
         /// <summary>
         ///     Denotes how traditional world updating applies to this world.
         /// </summary>
-        WorldUpdateParameters UpdateParameters { get; }
+        public virtual WorldUpdateParameters UpdateParameters => new();
 
         #endregion
 
