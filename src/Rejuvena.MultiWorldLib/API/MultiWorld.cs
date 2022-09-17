@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Rejuvena.MultiWorldLib.API.Behaviors;
 using Terraria.ModLoader;
 using Terraria.WorldBuilding;
 
@@ -9,46 +10,23 @@ namespace Rejuvena.MultiWorldLib.API
     /// </summary>
     public abstract class MultiWorld : ModType
     {
-        #region World Creation Parameters
+        #region Behaviors
 
         /// <summary>
-        ///     The world's width, in tiles.
+        ///     Determines how the world should generate, encompassing generation passes and world size.
         /// </summary>
-        public abstract int Width { get; }
+        public abstract IWorldGenerationBehavior GenerationBehavior { get; }
 
         /// <summary>
-        ///     The world's height, in tiles.
+        ///     Determines what data should be saved upon exiting.
         /// </summary>
-        public abstract int Height { get; }
-
+        public virtual IWorldSaveBehavior SaveBehavior => new StandardWorldSaveBehavior();
+        
         /// <summary>
-        ///     The world generation passes that should be ran upon generating this world.
+        ///     Determines how traditional world updating applies to this world.
         /// </summary>
-        public abstract IEnumerable<GenPass> Passes { get; }
-
-        /// <summary>
-        ///     The world generation configuration that should be applied upon generating this world.
-        /// </summary>
-        public virtual WorldGenConfiguration? Configuration => null;
-
-        #endregion
-
-        #region Saving
-
-        /// <summary>
-        ///     Describes what data should be saved upon exiting.
-        /// </summary>
-        public virtual WorldSaveParameters SaveParameters => new();
-
-        #endregion
-
-        #region Updating
-
-        /// <summary>
-        ///     Denotes how traditional world updating applies to this world.
-        /// </summary>
-        public virtual WorldUpdateParameters UpdateParameters => new();
-
+        public virtual IWorldUpdateBehavior UpdateBehavior => new StandardWorldUpdateBehavior();
+        
         #endregion
 
         #region Events

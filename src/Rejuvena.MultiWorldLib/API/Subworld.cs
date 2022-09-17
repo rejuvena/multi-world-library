@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Rejuvena.MultiWorldLib.API;
+using Rejuvena.MultiWorldLib.API.Behaviors;
 using Terraria.WorldBuilding;
 
 // Use sublib's namespace for drop-in compatibility.
@@ -11,12 +12,64 @@ namespace SubworldLibrary
     /// </summary>
     public abstract class Subworld : MultiWorld
     {
-        #region Subworld Members
+        public class SubworldWorldGenerationBehavior : IWorldGenerationBehavior
+        {
+            public int Width => subworld.Width;
+            
+            public int Height => subworld.Height;
+            
+            public IEnumerable<GenPass> Passes => subworld.Tasks;
+
+            public WorldGenConfiguration? Configuration => subworld.Config;
+
+            private readonly Subworld subworld;
+
+            public SubworldWorldGenerationBehavior(Subworld subworld) {
+                this.subworld = subworld;
+            }
+        }
+        public class SubworldWorldSaveBehavior : IWorldSaveBehavior
+        {
+            public bool SaveWorld => subworld.ShouldSave;
+
+            public bool SavePlayer => !subworld.NoPlayerSaving;
+            
+            private readonly Subworld subworld;
+
+            public SubworldWorldSaveBehavior(Subworld subworld) {
+                this.subworld = subworld;
+            }
+        }
+        
+        public class SubworldWorldUpdateBehavior : IWorldUpdateBehavior
+        {
+            public bool PerformTimeUpdates => subworld.NormalUpdates;
+            
+            public bool PerformWorldUpdates => subworld.NormalUpdates;
+            
+            public bool AdjustPlayerGravityAtSpaceHeight => subworld.NormalUpdates;
+            
+            public bool AdjustNPCGravityAtSpaceHeight => subworld.NormalUpdates;
+            
+            public bool EvaporateWaterAtUnderworldHeight => subworld.NormalUpdates;
+
+            private readonly Subworld subworld;
+
+            public SubworldWorldUpdateBehavior(Subworld subworld) {
+                this.subworld = subworld;
+            }
+        }
+
+        public abstract int Width { get; }
+
+        public abstract int Height { get; }
 
         /// <summary>
         ///     The <see cref="GenPass"/>es that should be used when this multi-world is generating.
         /// </summary>
         public abstract List<GenPass> Tasks { get; }
+
+        public virtual WorldGenConfiguration? Config => null;
 
         /// <summary>
         ///     Whether this world should save to a file to be loaded later.
@@ -33,36 +86,16 @@ namespace SubworldLibrary
         /// </summary>
         public virtual bool NormalUpdates => false;
 
-        #endregion
+        public sealed override IWorldGenerationBehavior GenerationBehavior { get; }
 
-        #region Multi-World Overrides
+        public sealed override IWorldSaveBehavior SaveBehavior { get; }
 
-        /// <summary>
-        ///     Short-hand for <see cref="Tasks"/>.
-        /// </summary>
-        public sealed override IEnumerable<GenPass> Passes => Tasks;
+        public sealed override IWorldUpdateBehavior UpdateBehavior { get; }
 
-        /// <summary>
-        ///     Uses the values of <see cref="ShouldSave"/> and<see cref="NoPlayerSaving"/>.
-        /// </summary>
-        public sealed override WorldSaveParameters SaveParameters => new(ShouldSave, !NoPlayerSaving);
-
-        /// <summary>
-        ///     Each parameter is set to the value of <see cref="NormalUpdates"/>.
-        /// </summary>
-        public sealed override WorldUpdateParameters UpdateParameters {
-            get {
-                bool norm = NormalUpdates;
-                return new WorldUpdateParameters(
-                    norm,
-                    norm,
-                    norm,
-                    norm,
-                    norm
-                );
-            }
+        protected Subworld() {
+            GenerationBehavior = new SubworldWorldGenerationBehavior(this);
+            SaveBehavior = new SubworldWorldSaveBehavior(this);
+            UpdateBehavior = new SubworldWorldUpdateBehavior(this);
         }
-
-        #endregion
     }
 }
