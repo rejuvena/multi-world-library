@@ -6,4 +6,6 @@ Multi-World Library is a [free](https://en.wikipedia.org/wiki/Free_as_in_Freedom
 
 Full Subworld Library compatibility is planned, ideally as a drag-and-drop replacement.
 
+This project is pending, but ideally it will end up becoming a more-maintainable, non-2000-line-single-file, user's-rights-respecting modding API.
+
 [^1]: Name pending.
