@@ -19,3 +19,5 @@ There should be an optional way to send every player to a subworld, with potenti
 There should be two different ways to interface with the mod's API, `object Terraria.ModLoader.Mod::Call(object[])` and a regular API. The former will just accept parameters that describe behaviors and other settings, as well as a \[potentially deprecated\] Subworld Library API mimic (does this still exist? John erroneously removed it under false pretenses a while ago and I am unsure it was ever added back).
 
 What's most important is being able to define basic world features, such as its side and generation passes.
+
+Other important features are changing space height, gravity, NPC spawnpools, removing hardcoded walls (+ custom walls, but those can be handled by biomes), etc.
